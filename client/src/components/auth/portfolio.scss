@@ -1,0 +1,26 @@
+.indivCoin {
+    padding: 6px 0 0 10px;
+    margin-bottom: 8px;
+    min-height: 50px;
+    border-bottom: 1px solid #ebebeb;
+}
+
+.portfolioJumbotron{
+    text-align: center;
+    margin: 32px 0 54px 0;
+    padding: 16px;
+    border: 1px solid #ebebeb;
+
+
+    h3 {
+        font-size: 20px;
+    }
+
+    .portfolioDescription {
+        font-size: 16px;
+    }
+}
+
+li {
+    list-style: none;
+}
