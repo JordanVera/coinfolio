@@ -47,7 +47,7 @@ class Portfolio extends Component {
                     <h3>$
                       <CountUp
                       start={0}
-                      end={1200.33}
+                      end={6711.11}
                       duration={3}
                       separator=","
                       decimals={2}
@@ -68,7 +68,7 @@ class Portfolio extends Component {
                   <h3>$
                     <CountUp
                     start={0}
-                    end={444}
+                    end={4294.77}
                     duration={3}
                     separator=","
                     decimals={2}
@@ -80,7 +80,7 @@ class Portfolio extends Component {
                   <h3>$
                   <CountUp
                     start={0}
-                    end={888.21}
+                    end={2416.34}
                     duration={3}
                     separator=","
                     decimals={2}
@@ -93,7 +93,7 @@ class Portfolio extends Component {
                   <h3>
                     <CountUp
                     start={0}
-                    end={220.11}
+                    end={63.99}
                     duration={3}
                     separator=","
                     decimals={2}
