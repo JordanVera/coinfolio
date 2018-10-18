@@ -113,8 +113,11 @@ class Portfolio extends Component {
                   <Col sm={2}>
                     <p id="ticker">{trade.shares}</p>
                   </Col>
-                  <Col sm={2}>
-                    <p id="ticker">{trade.buyPrice} <Button color="danger" style={{marginLeft: "24px"}}>Delete</Button></p>
+                  <Col sm={1}>
+                    <p id="ticker">{trade.buyPrice}</p>
+                  </Col>
+                  <Col sm={1}>
+                    <Button color="danger" size="sm">Delete</Button>
                   </Col>
                 </Row>
               </li>
