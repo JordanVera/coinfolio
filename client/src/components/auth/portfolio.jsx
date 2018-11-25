@@ -6,6 +6,7 @@ import { app, facebookProvider } from "../../firebase/firebase";
 import axios from 'axios';
 import PortfolioHeader from './portfolioHeader';
 import './portfolio.css';
+import { subscribeToTrades } from '../Socket';
 import CountUp from 'react-countup';
 import OwnedCoins from './ownedcoins';
 
@@ -18,10 +19,18 @@ class Portfolio extends Component {
       portfolio: []
     };
   }
+  CalcCost = _=>{
+    let temp=0;
+    this.state.portfolio.forEach(portfolioItem => {
+     temp=temp + portfolioItem.buyPrice * portfolioItem.shares; 
+    })
 
+    return temp;
+
+  }
   
   componentDidMount = _ => {
-    
+
      // axios post request
     axios.get(`/api/users/${this.props.uid}`)
       .then( response => {
@@ -33,12 +42,18 @@ class Portfolio extends Component {
     .catch( error => {
       console.log(error);
     });
+
+
   }
 
 
   render() {
+    let totalCost = this.CalcCost();
+    console.log("total cost: "+totalCost);
     return (
+      
         <div>
+          {this.componentDidMount()}
           <Container>
             <div className="portfolioJumbotron">
               <Row>
@@ -53,6 +68,8 @@ class Portfolio extends Component {
                       decimals={2}
                       decimal="." />
                     </h3>
+
+                    {/* {this.CalcCost()} */}
                   {/* {
                     this.state.portfolio.map(portfolioItem => {
                       return <li>{portfolioItem.buyPrice * portfolioItem.shares}</li>; 
@@ -68,7 +85,7 @@ class Portfolio extends Component {
                   <h3>$
                     <CountUp
                     start={0}
-                    end={4294.77}
+                    end={totalCost}
                     duration={3}
                     separator=","
                     decimals={2}
