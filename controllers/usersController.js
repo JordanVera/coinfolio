@@ -10,7 +10,7 @@ module.exports = {
       },
     updatePortfolio: function(req, res) {
         const uid = req.params.id;
-        console.log(req.params.id)
+        //console.log(req.params.id)
         const coin = {
             ticker: req.body.ticker,
             shares: req.body.shares,
@@ -23,23 +23,23 @@ module.exports = {
       },
     displayPortfolio: function(req, res) {
         const uid = req.params.id;
-        console.log(req.body)
+        //console.log(req.body)
         db.User
           .find({uid: uid})
           .then(dbModel => res.json(dbModel))
           .catch(err => res.status(422).json(err));
       },
     authUser: function(req, res) {
-        console.log(req.body.uid);
+        //console.log(req.body.uid);
         // check if the user exists in the db
         db.User.find({uid:req.body.uid})
             .then((results) => {
-                console.log(results);
+                //console.log(results);
                 if(results.length > 0){
-                    console.log("Found user")
+                    //console.log("Found user")
                       return res.json(results[0]);
                 } else {
-                    console.log("Making new User")
+                    //console.log("Making new User")
                     db.User.create({
                         uid: req.body.uid
                     })
