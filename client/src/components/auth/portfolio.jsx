@@ -17,7 +17,8 @@ class Portfolio extends Component {
     super(props)
     this.state = {
       redirect: false,
-      portfolio: []
+      portfolio: [],
+      hasLoaded: false
     };
   }
   CalcCost = _=>{
@@ -29,8 +30,6 @@ class Portfolio extends Component {
     return temp;
 
   }
-  calculate_percentage(cost,value) 
-  {return ((cost*100)/value);}
 
   calcCurrentValue = _ => {
     let temp=0;
@@ -57,26 +56,26 @@ class Portfolio extends Component {
         console.log("Getting portfolio data");
         console.log(response.data[0].portfolio);
         const portf = response.data[0].portfolio;
-        this.setState({ portfolio: portf });
+        this.setState({ portfolio: portf, hasLoaded: true });
     })
     .catch( error => {
       console.log(error);
     });
-    subscribeToTrades((trades) => {
-      let datac = this.data;
-      const newTrade = trades && trades.msg ? trades.msg : null;
-      if (newTrade.short) {
-        var index = datac.findIndex((item) => {
-          return item.short === newTrade.short;
-        });
+    // subscribeToTrades((trades) => {
+    //   let datac = this.data;
+    //   const newTrade = trades && trades.msg ? trades.msg : null;
+    //   if (newTrade.short) {
+    //     var index = datac.findIndex((item) => {
+    //       return item.short === newTrade.short;
+    //     });
 
-        if (index >= 0) {
-          datac[index] = newTrade;
-          this.data=datac;
-        }
-        console.log(this.data)
-      }
-    });
+    //     if (index >= 0) {
+    //       datac[index] = newTrade;
+    //       this.data=datac;
+    //     }
+    //     console.log(this.data)
+    //   }
+    // });
     this.fetchData();
 
   }
@@ -105,7 +104,7 @@ class Portfolio extends Component {
     return (
       
         <div>
-          {/* {this.componentDidMount()} */}
+          {!this.state.hasLoaded && this.componentDidMount()}
           <Container>
             <div className="portfolioJumbotron">
               <Row>
