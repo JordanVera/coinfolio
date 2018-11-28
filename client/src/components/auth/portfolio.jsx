@@ -46,6 +46,11 @@ class Portfolio extends Component {
     return temp;
 
   }
+
+  totalProfitAsPercentage(totalProfit, totalCost) {
+    return Math.floor((totalProfit / totalCost) * 100)
+  }
+
     data=[];
   dataOriginal=[];
   componentDidMount = _ => {
@@ -96,11 +101,14 @@ class Portfolio extends Component {
   }
 
   render() {
-    let totalCost = this.CalcCost();
-    let currentValue = this.calcCurrentValue();
-    let totalProfit = currentValue-totalCost;
-    //let percentage = this.calculate_percentage(totalCost,currentValue);
-    //console.log("total cost: "+percentage);
+    const totalCost = this.CalcCost();
+    const currentValue = this.calcCurrentValue();
+    const totalProfit = currentValue-totalCost;
+
+    // console.log(`total cost: ${totalCost}`);
+    // console.log(`current port value: ${totalProfit}`);
+    const totalProfitAsPercentage = setTimeout(this.totalProfitAsPercentage(totalProfit, totalCost) , 1000);
+    // console.log("total profit as %: " + totalProfitAsPercentage);
     return (
       
         <div>
@@ -161,7 +169,7 @@ class Portfolio extends Component {
                   <h3>
                     <CountUp
                     start={0}
-                    end={()=>((totalCost*100)/currentValue)}
+                    end={totalProfitAsPercentage}
                     duration={3}
                     separator=","
                     decimals={2}
