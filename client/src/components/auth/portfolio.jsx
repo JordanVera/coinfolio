@@ -6,6 +6,8 @@ import { app, facebookProvider } from "../../firebase/firebase";
 import axios from 'axios';
 import PortfolioHeader from './portfolioHeader';
 import './portfolio.css';
+import { subscribeToTrades } from '../Socket';
+import { API_URL_COINCAP } from '../../constans';
 import CountUp from 'react-countup';
 import OwnedCoins from './ownedcoins';
 
@@ -18,10 +20,37 @@ class Portfolio extends Component {
       portfolio: []
     };
   }
+  CalcCost = _=>{
+    let temp=0;
+    this.state.portfolio.forEach(portfolioItem => {
+     temp=temp + portfolioItem.buyPrice * portfolioItem.shares; 
+    })
 
-  
+    return temp;
+
+  }
+  calculate_percentage(cost,value) 
+  {return ((cost*100)/value);}
+
+  calcCurrentValue = _ => {
+    let temp=0;
+    this.data.forEach((dataElement)=>{
+      this.state.portfolio.forEach((portfolioElement)=>{
+        if(dataElement.short == portfolioElement.ticker )
+        {
+          temp= temp + (dataElement.price * portfolioElement.shares);
+        }
+      })
+      
+    })
+
+    return temp;
+
+  }
+    data=[];
+  dataOriginal=[];
   componentDidMount = _ => {
-    
+
      // axios post request
     axios.get(`/api/users/${this.props.uid}`)
       .then( response => {
@@ -33,12 +62,50 @@ class Portfolio extends Component {
     .catch( error => {
       console.log(error);
     });
+    subscribeToTrades((trades) => {
+      let datac = this.data;
+      const newTrade = trades && trades.msg ? trades.msg : null;
+      if (newTrade.short) {
+        var index = datac.findIndex((item) => {
+          return item.short === newTrade.short;
+        });
+
+        if (index >= 0) {
+          datac[index] = newTrade;
+          this.data=datac;
+        }
+        console.log(this.data)
+      }
+    });
+    this.fetchData();
+
   }
 
+  
+  fetchData() {
+    fetch(`${API_URL_COINCAP}/front`)
+      .then(resp => resp.json())
+      .then(data => {
+        this.data = data
+        this.dataOriginal = data;
+        console.log(this.data);
+        return;
+      })
+      .catch(function (error) {
+        console.log('Request failed', error);
+      });
+  }
 
   render() {
+    let totalCost = this.CalcCost();
+    let currentValue = this.calcCurrentValue();
+    let totalProfit = currentValue-totalCost;
+    //let percentage = this.calculate_percentage(totalCost,currentValue);
+    //console.log("total cost: "+percentage);
     return (
+      
         <div>
+          {/* {this.componentDidMount()} */}
           <Container>
             <div className="portfolioJumbotron">
               <Row>
@@ -47,12 +114,14 @@ class Portfolio extends Component {
                     <h3>$
                       <CountUp
                       start={0}
-                      end={6711.11}
+                      end={currentValue}
                       duration={3}
                       separator=","
                       decimals={2}
                       decimal="." />
                     </h3>
+
+                    {/* {this.CalcCost()} */}
                   {/* {
                     this.state.portfolio.map(portfolioItem => {
                       return <li>{portfolioItem.buyPrice * portfolioItem.shares}</li>; 
@@ -68,7 +137,7 @@ class Portfolio extends Component {
                   <h3>$
                     <CountUp
                     start={0}
-                    end={4294.77}
+                    end={totalCost}
                     duration={3}
                     separator=","
                     decimals={2}
@@ -80,7 +149,7 @@ class Portfolio extends Component {
                   <h3>$
                   <CountUp
                     start={0}
-                    end={2416.34}
+                    end={totalProfit}
                     duration={3}
                     separator=","
                     decimals={2}
@@ -93,7 +162,7 @@ class Portfolio extends Component {
                   <h3>
                     <CountUp
                     start={0}
-                    end={63.99}
+                    end={()=>((totalCost*100)/currentValue)}
                     duration={3}
                     separator=","
                     decimals={2}
