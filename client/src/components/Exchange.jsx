@@ -35,7 +35,6 @@ class Exchange extends Component {
       //     </Button> */}
       //     <Button color="primary">Track</Button>
       //   </Fragment>s
-  
       <Link to={{pathname:`/holdcoin/:${currency}`}} uid={this.props.uid}>hold</Link>
     )
   }
