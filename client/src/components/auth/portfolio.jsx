@@ -17,8 +17,7 @@ class Portfolio extends Component {
     super(props)
     this.state = {
       redirect: false,
-      portfolio: [],
-      hasLoaded: false
+      portfolio: []
     };
   }
   CalcCost = _=>{
@@ -51,7 +50,11 @@ class Portfolio extends Component {
   }
 
     data=[];
-  dataOriginal=[];
+    dataOriginal=[];
+
+  componentWillMount = _ => {
+    this.fetchData();
+  }
 
   componentDidMount = _ => {
     console.log("componentdid mount")
@@ -62,28 +65,11 @@ class Portfolio extends Component {
         console.log("Getting portfolio data");
         console.log(response.data[0].portfolio);
         const portf = response.data[0].portfolio;
-        this.setState({ portfolio: portf, hasLoaded: true });
+        this.setState({ portfolio: portf });
     })
     .catch( error => {
       console.log(error);
     });
-    // subscribeToTrades((trades) => {
-    //   let datac = this.data;
-    //   const newTrade = trades && trades.msg ? trades.msg : null;
-    //   if (newTrade.short) {
-    //     var index = datac.findIndex((item) => {
-    //       return item.short === newTrade.short;
-    //     });
-
-    //     if (index >= 0) {
-    //       datac[index] = newTrade;
-    //       this.data=datac;
-    //     }
-    //     console.log(this.data)
-    //   }
-    // });
-    this.fetchData();
-
   }
 
   
@@ -113,7 +99,7 @@ class Portfolio extends Component {
     return (
       
         <div>
-          {!this.state.hasLoaded && this.componentDidMount()}
+          {this.componentDidMount()}
           <Container>
             <div className="portfolioJumbotron">
               <Row>
