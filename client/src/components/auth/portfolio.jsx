@@ -21,23 +21,24 @@ class Portfolio extends Component {
     };
   }
   CalcCost = _=>{
-    let temp=0;
-    this.state.portfolio.forEach(portfolioItem => {
+    let temp = 0;
+    this.state.portfolio.forEach( portfolioItem => {
      temp=temp + portfolioItem.buyPrice * portfolioItem.shares; 
     })
 
     return temp;
 
   }
-  calculate_percentage(cost,value) 
-  {return ((cost*100)/value);}
+
+  totalProfitAsPercentage = (totalProfit, totalCost) => {
+    return Math.floor((totalProfit / totalCost) * 100)
+  }
 
   calcCurrentValue = _ => {
-    let temp=0;
-    this.data.forEach((dataElement)=>{
-      this.state.portfolio.forEach((portfolioElement)=>{
-        if(dataElement.short == portfolioElement.ticker )
-        {
+    let temp = 0;
+    this.data.forEach( dataElement => {
+      this.state.portfolio.forEach( portfolioElement => {
+        if(dataElement.short == portfolioElement.ticker ) {
           temp= temp + (dataElement.price * portfolioElement.shares);
         }
       })
@@ -47,11 +48,14 @@ class Portfolio extends Component {
     return temp;
 
   }
-    data=[];
+  
+  data=[];
   dataOriginal=[];
-  componentDidMount = _ => {
 
-     // axios post request
+  componentDidMount = _ => {
+    console.log("componentdid mount")
+
+    //  axios post request
     axios.get(`/api/users/${this.props.uid}`)
       .then( response => {
         console.log("Getting portfolio data");
@@ -97,15 +101,16 @@ class Portfolio extends Component {
   }
 
   render() {
-    let totalCost = this.CalcCost();
-    let currentValue = this.calcCurrentValue();
-    let totalProfit = currentValue-totalCost;
-    //let percentage = this.calculate_percentage(totalCost,currentValue);
-    //console.log("total cost: "+percentage);
+    const totalCost = this.CalcCost();
+    const currentValue = this.calcCurrentValue();
+    const totalProfit = currentValue-totalCost;
+    const totalProfitAsPercentage =  this.totalProfitAsPercentage(totalProfit, totalCost);
+    console.log("total cost percentage: "+ totalProfitAsPercentage);
+
     return (
       
         <div>
-          {/* {this.componentDidMount()} */}
+          {this.componentDidMount()}
           <Container>
             <div className="portfolioJumbotron">
               <Row>
@@ -162,7 +167,7 @@ class Portfolio extends Component {
                   <h3>
                     <CountUp
                     start={0}
-                    end={()=>((totalCost*100)/currentValue)}
+                    end={totalProfitAsPercentage}
                     duration={3}
                     separator=","
                     decimals={2}
