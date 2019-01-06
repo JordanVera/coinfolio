@@ -15,8 +15,8 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "concurrently": "^3.5.0",
-    "nodemon": "^1.11.0"
+    "concurrently": "^4.1.0",
+    "nodemon": "^1.18.9"
   },
   "dependencies": {
     "body-parser": "^1.18.2",
@@ -28,6 +28,7 @@
     "firebase": "^5.5.3",
     "mongoose": "^5.3.0",
     "morgan": "^1.9.1",
-    "path": "^0.12.7"
+    "path": "^0.12.7",
+    "http-proxy-middleware":"0.19.1"
   }
 }
